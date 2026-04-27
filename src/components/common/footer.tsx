@@ -1,26 +1,58 @@
+"use client"
+
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 const links = [
   {
     title: "Home",
-    href: "#",
+    href: "#home",
   },
   {
     title: "Confessions",
-    href: "#",
+    href: "#confession",
   },
   {
     title: "Features",
-    href: "#",
+    href: "#features",
   },
   {
     title: "Get Started",
-    href: "#",
+    href: "#get-started",
   },
 ];
 
 export default function FooterSection() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const scrollToSection = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const sectionId = href.replace("#", "");
+
+    if (pathname !== "/") {
+      router.push("/" + href);
+      return;
+    }
+
+    if (sectionId === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const navbarHeight = 64;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - navbarHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [pathname, router]);
+
   return (
     <footer className="py-16 md:py-32">
       <div className="mx-auto max-w-5xl px-6">
@@ -29,6 +61,7 @@ export default function FooterSection() {
             <Link
               key={index}
               href={link.href}
+              onClick={(e) => scrollToSection(e, link.href)}
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <span>{link.title}</span>
