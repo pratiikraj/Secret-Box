@@ -36,6 +36,10 @@ const DeleteAccount = () => {
           "Content-Type": "application/json",
         },
       });
+      if (!res.ok) {
+        toast.error("Failed to delete account");
+        return;
+      }
       const data = await res.json();
       if (!data.success) {
         toast.error(data.message);

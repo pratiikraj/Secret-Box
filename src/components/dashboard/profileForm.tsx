@@ -55,6 +55,10 @@ export function ProfileForm() {
           "Content-Type": "application/json"
         }
       })
+      if (!res.ok) {
+        toast.error("Failed to load profile")
+        return
+      }
       const data = await res.json()
       if(!data.success){
         toast.error(data.message)
@@ -90,6 +94,10 @@ export function ProfileForm() {
       setIsCheckingUsername(true)
       setUsernameMessage("")
       const res = await fetch(`/api/check-username?username=${username}`)
+      if (!res.ok) {
+        setUsernameMessage("Error checking username")
+        return
+      }
       const data = await res.json()
       setUsernameMessage(data.message)
     }
@@ -133,6 +141,10 @@ export function ProfileForm() {
           method: "POST",
           body: formData,
         })
+        if (!res.ok) {
+          toast.error("Failed to upload image")
+          return
+        }
         const result = await res.json()
 
         if(!result.success){
@@ -153,6 +165,10 @@ export function ProfileForm() {
           id: user?._id,
         }),
       })
+      if (!res.ok) {
+        toast.error("Failed to update profile")
+        return
+      }
       const result = await res.json()
       if (!result.success) {
         toast.error(result.message)
@@ -266,18 +282,10 @@ export function ProfileForm() {
                   )}
                 />
                 
-                <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <Input {...field} disabled={true} placeholder="Enter your email address" />
-                    {/* <p className="text-xs text-muted-foreground">A brief description of what you do</p> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <div className="space-y-2">
+                    <label className="text-sm font-medium leading-none">Email</label>
+                    <Input value={user?.email || ""} disabled={true} placeholder="Enter your email address" />
+                </div>
               </div>
               <FormField
                   control={form.control}

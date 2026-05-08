@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
@@ -15,7 +15,7 @@ export const options: NextAuthOptions = {
                 identifier: { label: "Username or Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials): Promise<any> {
+            async authorize(credentials): Promise<User | null> {
                 if (!credentials?.identifier || !credentials?.password) {
                     throw new Error("Please provide all required fields");
                 }
@@ -46,7 +46,7 @@ export const options: NextAuthOptions = {
                             otpSession: false,
                             otpSessionExpiry: undefined,
                         });
-                        return user;
+                        return user as unknown as User;
                     }
                     throw new Error("Invalid OTP session");
                 }
@@ -64,7 +64,7 @@ export const options: NextAuthOptions = {
                     throw new Error("Incorrect password");
                 }
 
-                return user;
+                return user as unknown as User;
             },
         }),
         GoogleProvider({

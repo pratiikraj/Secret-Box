@@ -50,6 +50,10 @@ const  ResetPassword = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: username, newPassword: formData.password, token: token}),
         })
+        if (!res.ok) {
+            toast.error("Failed to reset password")
+            return
+        }
         const resData = await res.json()
         if (!resData.success) {
             toast.error(resData.message)

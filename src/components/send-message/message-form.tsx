@@ -28,6 +28,10 @@ export function MessageForm({ username }: { username?: string }) {
                 content: message,
             }),
         })
+        if (!res.ok) {
+            toast.error("Failed to send message");
+            return;
+        }
         const data = await res.json();
         if(!data.success){
             toast.error(data.message);

@@ -77,6 +77,10 @@ export default function Analytics() {
     try {
       setIsLoading(true)
       const res = await fetch("/api/admin/analytics")
+      if (!res.ok) {
+        toast.error("Failed to fetch analytics")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         toast.error(data.message || "Failed to fetch analytics")
@@ -104,6 +108,10 @@ export default function Analytics() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: userToDelete._id }),
       })
+      if (!res.ok) {
+        toast.error("Failed to delete user")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         toast.error(data.message)

@@ -81,6 +81,11 @@ const  MessagesTable =({messages, setMessages, isLoading, searchQuery} : Message
         },
         body: JSON.stringify({id: m._id}),
         })
+        if (!res.ok) {
+            optimisticUpdate(m._id, { starred: oldStarred })
+            toast.error("Failed to toggle star")
+            return
+        }
         const data = await res.json()
         if(!data.success){
             optimisticUpdate(m._id, { starred: oldStarred })
@@ -113,6 +118,11 @@ const  MessagesTable =({messages, setMessages, isLoading, searchQuery} : Message
         },
         body: JSON.stringify({ id: m._id }),
       })
+      if (!res.ok) {
+        setMessages(prevMessages)
+        toast.error("Failed to delete message")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         setMessages(prevMessages)
@@ -141,6 +151,11 @@ const  MessagesTable =({messages, setMessages, isLoading, searchQuery} : Message
                 },
                 body: JSON.stringify({id: m._id}),
             })
+            if (!res.ok) {
+                optimisticUpdate(m._id, { read: false })
+                toast.error("Failed to mark message as read")
+                return
+            }
             const data = await res.json()
             if(!data.success){
                 toast.error("Failed to mark message as read")

@@ -57,6 +57,10 @@ export default function Overview() {
     try {
       setIsLoading(true)
       const res = await fetch("/api/get-messages")
+      if (!res.ok) {
+        console.error("Failed to fetch messages:", res.status)
+        return
+      }
       const data = await res.json()
       if (!data.success) return
       setMessages(data.data || [])

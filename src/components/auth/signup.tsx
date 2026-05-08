@@ -56,6 +56,10 @@ const Signup = () => {
         setIsCheckingUsername(true)
         setUsernameMessage("")
         const res = await fetch(`/api/check-username?username=${username}`)
+        if (!res.ok) {
+          setUsernameMessage("Error checking username")
+          return
+        }
         const data = await res.json()
         if (!data.success) {
           setUsernameMessage(data.message)
@@ -81,6 +85,10 @@ const Signup = () => {
         },
         body: JSON.stringify(data),
       })
+      if (!res.ok) {
+        toast.error("Failed to sign up")
+        return
+      }
       const resData = await res.json()
       if (!resData.success) {
         toast.error(resData.message)

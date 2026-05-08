@@ -20,6 +20,10 @@ const SenderControl = () => {
         method: "GET",
         headers: { "Content-Type": "application/json" }
       })
+      if (!res.ok) {
+        toast.error("Failed to fetch settings")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         toast.error(data.message || "Failed to fetch settings")
@@ -42,6 +46,10 @@ const SenderControl = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ acceptMessages: checked })
       })
+      if (!res.ok) {
+        toast.error("Failed to update settings")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         toast.error(data.message)

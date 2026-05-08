@@ -44,6 +44,11 @@ export default function VerifyOtp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username, code: otp }),
       })
+      if (!res.ok) {
+        toast.error("Failed to verify code")
+        setOtp("")
+        return
+      }
       const resData = await res.json()
       if (!resData.success) {
         toast.error(resData.message)
@@ -83,6 +88,10 @@ export default function VerifyOtp() {
             username: username
           }),
         })
+        if (!res.ok) {
+          toast.error("Failed to resend code")
+          return
+        }
         const resData = await res.json();
         if (!resData.success) {
           toast.error(resData.message);

@@ -26,6 +26,10 @@ const  SendOtp = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       })
+      if (!res.ok) {
+        toast.error("Failed to send reset code")
+        return
+      }
       const resData = await res.json()
       if (!resData.success) {
         toast.error(resData.message)

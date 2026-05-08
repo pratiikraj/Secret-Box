@@ -21,6 +21,10 @@ export default function MessagesPage() {
       else setIsLoading(true)
 
       const res = await fetch("/api/get-messages")
+      if (!res.ok) {
+        toast.error("Failed to fetch messages")
+        return
+      }
       const data = await res.json()
       if (!data.success) {
         toast.error(data.message || "Failed to fetch messages")
